@@ -116,3 +116,47 @@ const promptUser = () => {
     });
 };
 
+// TODO create function for showEmployees
+showEmployees = () => {
+    const sql = `SELECT employee.id,
+                        employee.first_name,
+                        employee.last_name,
+                        role.title,
+                        department.name AS department,
+                        role.salary,
+                        CONCAT (manager.first_name, " ", manager.last_name) AS manager
+                    FROM employee
+                        LEFT JOIN role ON Employee.role_id = role.id
+                        LEFT JOIN department on role.department_id = department.id
+                        LEFT JOIN employee manager ON employee.manager_id = manager.id`;
+    connection.promise().query(sql, (err, rows) => {
+        if (err) throw err;
+        console.table(rows);
+        promptUser();
+    });
+};
+// TODO create function for addEmployee
+
+// TODO create function for updateEmployee
+
+// TODO create function for updateManager
+
+// TODO create function for employeeDepartment
+
+// TODO create function for showRoles
+
+// TODO create function for addRole
+
+// TODO create function for showDepartments
+
+// TODO create function for addDepartments
+
+// TODO create function for deleteDepartment
+
+// TODO create function for deleteRole
+
+// TODO create function for deleteEmployee
+
+// TODO create function for showSalaries
+
+// TODO create function for quiting prompt
