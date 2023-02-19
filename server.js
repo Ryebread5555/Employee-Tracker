@@ -1,6 +1,7 @@
 // TODO import and require mysql12 and inquirer
 const mysql = require('mysql12');
 const inquirer = require('inquirer');
+const cTable = require('console.table');
 
 // connect to database
 const db = mysql.createConnection (
@@ -33,8 +34,8 @@ const promptUser = () => {
     inquirer.prompt ([
         {
             type: 'list',
-            name: 'choices',
             message: 'What would you like to do? (Use arrow keys)',
+            name: 'choices',
             choices: [
                 'View All Employess',
                 'Add Employee',
@@ -136,6 +137,75 @@ showEmployees = () => {
     });
 };
 // TODO create function for addEmployee
+addEmployee = () => {
+    inquirer.prompt([
+        {
+            type: 'input',
+            message: "Enter employee's first name.",
+            name: 'firstName',
+        },
+        {
+            type: 'input',
+            message: "Enter employee's last name.",
+            name: 'lastName',
+        }
+    ])
+    .then(answer => {
+        const params = [answer.firstName, answer.lastName]
+        const roleSql = `SELECT role.id, role.title FROM role`;
+
+        connection.promise().query(roleSql, (err, data) => {
+            if (err) throw err;
+
+            const roles = data.map(({id, title}) => ({name: title, value: id}));
+
+            inquirer.prompt([
+                {
+                    type: 'list',
+                    message: "Choose the employee's role.",
+                    name: 'role',
+                    choices: roles
+                }
+            ])
+            .then(roleChoice => {
+                const role = roleChoice.role;
+                params.push(role);
+
+                const managerSQL = `SELECT * FROM employee`;
+
+                
+
+                connection.promise().query(managerSql, (err, data) => {
+                    if (err) throw err;
+                
+                const managers = data.map(({idss, first_name, last_name}) => ({name: first_name + " "+ last_name, value: id}));    
+                
+                inquirer.prompt([
+                    {
+                        type: 'list',
+                        message: "Who is the manager for the employee?",
+                        name: 'manager',
+                        choices: managers,
+                    }
+                ])
+                .then(managerChoice => {
+                    const manger = managerChoice.manager;
+                    params.push(manager);
+
+                    const sql = `INSERT INTO employee (first_name, last_name, role_id, manager_id) VALUES (?, ?, ?, ?)`;
+
+                    connection.query(sql, params, (err, result) => {
+                        if (err) throw err;
+                        console.log("Employee added succesfully!")
+
+                        showEmployees();
+                    });
+                });
+                });
+            });
+        });
+    });
+};
 
 // TODO create function for updateEmployee
 
