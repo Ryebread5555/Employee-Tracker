@@ -31,7 +31,7 @@ const promptUser = () => {
             message: 'What would you like to do? (Use arrow keys)',
             name: 'choices',
             choices: [
-                'View All Employess',
+                'View All Employees',
                 'Add Employee',
                 'Update Employee Role',
                 'Update Employee Manager',
@@ -248,10 +248,44 @@ const updateEmployeeRole = async () => {
       console.log(err);
     }
   };
-  
-
 // TODO create function for updateManager
-
+const updateEmployeeManager = async () => {
+    try {
+      const [employeeRows] = await db.promise().query('SELECT * FROM employee');
+      const employees = employeeRows.map(({ id, first_name, last_name }) => ({ name: `${first_name} ${last_name}`, value: id }));
+  
+      const employeeChoice = await inquirer.prompt([
+        {
+          type: 'list',
+          message: 'Choose the employee to update their manager:',
+          name: 'name',
+          choices: employees,
+        },
+      ]);
+      
+      const employeeId = employeeChoice.name;
+      const [managerRows] = await db.promise().query('SELECT * FROM employee WHERE id != ?', [employeeId]);
+      const managers = managerRows.map(({ id, first_name, last_name }) => ({ name: `${first_name} ${last_name}`, value: id }));
+  
+      const managerChoice = await inquirer.prompt([
+        {
+          type: 'list',
+          message: 'Select the employee\'s new manager:',
+          name: 'manager',
+          choices: managers,
+        },
+      ]);
+  
+      const managerId = managerChoice.manager;
+      const [updateResult] = await db.promise().query('UPDATE employee SET manager_id = ? WHERE id = ?', [managerId, employeeId]);
+  
+      console.log("The employee's manager has been updated!");
+  
+      showEmployees();
+    } catch (err) {
+      console.log(err);
+    }
+  };
 // TODO create function for employeeDepartment
 
 // TODO create function for showRoles
