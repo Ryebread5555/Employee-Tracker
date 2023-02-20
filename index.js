@@ -8,7 +8,7 @@ const db = mysql.createConnection (
     {
         host: 'localhost',
         user: 'root',
-        password: 'RpetThecodder0760',
+        password: '',
         database: 'employee_db'
     },
 );
@@ -28,7 +28,7 @@ const promptUser = () => {
     inquirer.prompt ([
         {
             type: 'list',
-            message: 'What would you like to do? (Use arrow keys)',
+            message: 'What would you like to do?',
             name: 'choices',
             choices: [
                 'View All Employees',
@@ -45,8 +45,6 @@ const promptUser = () => {
                 'Delete A Employee',
                 'View Total Department Salaries',
                 'Quit',
-                new inquirer.Separator(),
-                '(Move up and down to reveal more choices)'
             ]
         }
     ])
@@ -322,9 +320,71 @@ const showRoles = async () => {
     }
   };
 // TODO create function for addRole
-
+const addRole = async () => {
+    try {
+      const departments = await db.promise().query('SELECT id, name FROM department');
+      const deptChoices = departments[0].map(({ id, name }) => ({ name: name, value: id }));
+  
+      const answers = await inquirer.prompt([
+        {
+          type: 'input',
+          message: "Create a new role.",
+          name: 'role',
+          validate: addRole => {
+            if (addRole) {
+              return true;
+            } else {
+              console.log('Please enter a role!');
+              return false;
+            }
+          }
+        },
+        {
+          type: 'input',
+          message: "What is the salary for this role?",
+          name: 'salary',
+          validate: addSalary => {
+            if (!isNaN(addSalary)) {
+              return true;
+            } else {
+              console.log("Please enter a valid salary for this role!")
+              return false;
+            }
+          }          
+        },
+        {
+          type: 'list',
+          message: "Select the department this role belongs to.",
+          name: 'dept',
+          choices: deptChoices
+        }
+      ]);
+  
+      const params = [answers.role, answers.salary, answers.dept];
+  
+      const sql = `INSERT INTO role (title, salary, department_id) VALUES (?, ?, ?)`;
+      await db.promise().query(sql, params);
+  
+      console.log(`${answers.role} has been added to roles!`);
+      promptUser();
+    } catch (err) {
+      console.log(err);
+    }
+  };
 // TODO create function for showDepartments
-
+const showDepartments = async () => {
+    console.log('Here are all of the departments.');
+  
+    const sql = 'SELECT * FROM department';
+  
+    try {
+      const [rows] = await db.promise().query(sql);
+      console.table(rows);
+      promptUser();
+    } catch (err) {
+      console.log(err);
+    }
+  };
 // TODO create function for addDepartments
 
 // TODO create function for deleteDepartment
