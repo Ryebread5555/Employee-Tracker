@@ -386,7 +386,35 @@ const showDepartments = async () => {
     }
   };
 // TODO create function for addDepartments
-
+const addDepartment = async () => {
+    try {
+      const answer = await inquirer.prompt([
+        {
+          type: 'input',
+          message: "Create a new department.",
+          name: 'department',
+          validate: addDepartment => {
+            if (addDepartment) {
+              return true;
+            } else {
+              console.log('Please enter a department name!');
+              return false;
+            }
+          }
+        }
+      ]);
+  
+      const params = [answer.department];
+  
+      const sql = `INSERT INTO department (name) VALUES (?)`;
+      await db.promise().query(sql, params);
+  
+      console.log(`${answer.department} has been added to departments!`);
+      promptUser();
+    } catch (err) {
+      console.log(err);
+    }
+  };
 // TODO create function for deleteDepartment
 
 // TODO create function for deleteRole
