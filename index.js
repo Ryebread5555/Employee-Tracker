@@ -287,9 +287,40 @@ const updateEmployeeManager = async () => {
     }
   };
 // TODO create function for employeeDepartment
-
+const showEmployeesByDepartment = async () => {
+    console.log('Here are the employees and their departments.');
+    const sql = `
+      SELECT employee.first_name,
+             employee.last_name,
+             department.name AS department
+      FROM employee
+      LEFT JOIN role ON Employee.role_id = role.id
+      LEFT JOIN department ON role.department_id = department.id
+    `;
+    try {
+      const [rows] = await db.promise().query(sql);
+      console.table(rows);
+      promptUser();
+    } catch (err) {
+      console.log(err);
+    }
+  }; 
 // TODO create function for showRoles
-
+const showRoles = async () => {
+    console.log('Here are all of the current roles.');
+  
+    const sql = `SELECT role.id, role.title, department.name AS department
+                 FROM role
+                 INNER JOIN department ON role.department_id = department.id`;
+  
+    try {
+      const [rows] = await db.promise().query(sql);
+      console.table(rows);
+      promptUser();
+    } catch (err) {
+      console.log(err);
+    }
+  };
 // TODO create function for addRole
 
 // TODO create function for showDepartments
@@ -304,4 +335,4 @@ const updateEmployeeManager = async () => {
 
 // TODO create function for showSalaries
 
-// TODO create function for quiting prompt
+
