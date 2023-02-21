@@ -16,11 +16,11 @@ VALUES ('Sales Lead', 100000, 4),
        ('Lawyer', 190000, 3);
 
 INSERT INTO employee (first_name, last_name, role_id, manager_id)
-VALUES ('Link', 'Hyrule', 2, null),
-       ('Zelda', 'Hyrule', 1, 1),
-       ('Zavala', 'Vanguard', 5, 7),
-       ('Cayde', 'Six', 4, null),
-       ('Donkey', 'Kong', 7, 5),
-       ('Ash', 'Ketchum', 8, null),
-       ('Mario', 'Super', 3, null),
-       ('Bowser', 'Koopa', 6, 3);
+VALUES ('Link', 'Hyrule', 1, NULL),
+       ('Zelda', 'Hyrule', 2, 1),
+       ('Zavala', 'Vanguard', 7, NULL),
+       ('Cayde', 'Six', 8, 3),
+       ('Donkey', 'Kong', 5, NULL),
+       ('Diddy', 'Kong', 6, 5),
+       ('Mario', 'Super', 3, Null),
+       ('Luigi', 'Super', 4, 7);
