@@ -416,7 +416,42 @@ const addDepartment = async () => {
     }
   };
 // TODO create function for deleteDepartment
-
+const deleteDepartment = async () => {
+    try {
+      const deptSql = `SELECT * FROM department`;
+      const [departments] = await db.promise().query(deptSql);
+  
+      const deptChoices = departments.map(({ name, id }) => ({ name: name, value: id }));
+  
+      const { dept, confirm } = await inquirer.prompt([
+        {
+          type: 'list',
+          message: 'Select the department you want to delete.',
+          name: 'dept',
+          choices: deptChoices
+        },
+        {
+          type: 'confirm',
+          message: 'Are you sure you want to delete this department?',
+          name: 'confirm',
+          default: false
+        }
+      ]);
+  
+      if (dept && confirm) {
+        const sql = `DELETE FROM department WHERE id = ?`;
+        await db.promise().query(sql, dept);
+        console.log('Successfully deleted!');
+        showDepartments();
+      } else {
+        console.log('Department not deleted.');
+        showDepartments();
+      }
+  
+    } catch (err) {
+      console.log(err);
+    }
+  };
 // TODO create function for deleteRole
 
 // TODO create function for deleteEmployee
