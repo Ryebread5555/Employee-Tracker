@@ -8,7 +8,7 @@ const db = mysql.createConnection (
     {
         host: 'localhost',
         user: 'root',
-        password: '',
+        password: 'RpetThecodder0760',
         database: 'employee_db'
     },
 );
@@ -453,9 +453,95 @@ const deleteDepartment = async () => {
     }
   };
 // TODO create function for deleteRole
-
+const deleteRole = async () => {
+    try {
+      const rolesSql = `SELECT * FROM role`;
+      const [roles] = await db.promise().query(rolesSql);
+  
+      const roleChoices = roles.map(({ title, id }) => ({ name: title, value: id }));
+  
+      const { role, confirm } = await inquirer.prompt([
+        {
+          type: 'list',
+          message: 'Select the role you want to delete.',
+          name: 'role',
+          choices: roleChoices,
+        },
+        {
+          type: 'confirm',
+          message: 'Are you sure you want to delete this role?',
+          name: 'confirm',
+          default: false,
+        },
+      ]);
+  
+      if (role && confirm) {
+        const sql = `DELETE FROM role WHERE id = ?`;
+        await db.promise().query(sql, role);
+        console.log('Successfully deleted!');
+        showRoles();
+      } else {
+        console.log('Role not deleted.');
+        showRoles();
+      }
+    } catch (err) {
+      console.log(err);
+    }
+  };
 // TODO create function for deleteEmployee
-
+const deleteEmployee = async () => {
+    try {
+      const employeesSql = `SELECT * FROM employee`;
+      const [employees] = await db.promise().query(employeesSql);
+  
+      const employeeChoices = employees.map(({ id, first_name, last_name }) => ({ name: `${first_name} ${last_name}`, value: id }));
+  
+      const { employeeId, confirm } = await inquirer.prompt([
+        {
+          type: 'list',
+          message: 'Select the employee you want to delete.',
+          name: 'employeeId',
+          choices: employeeChoices,
+        },
+        {
+          type: 'confirm',
+          message: 'Are you sure you want to delete this employee?',
+          name: 'confirm',
+          default: false,
+        },
+      ]);
+  
+      if (employeeId && confirm) {
+        const sql = `DELETE FROM employee WHERE id = ?`;
+        await db.promise().query(sql, employeeId);
+        console.log('Successfully deleted!');
+        showEmployees();
+      } else {
+        console.log('Employee not deleted.');
+        showEmployees();
+      }
+  
+    } catch (err) {
+      console.log(err);
+    }
+  };
 // TODO create function for showSalaries
-
+const showTotalSalaries = async () => {
+    console.log('This is the total budget by department');
+  
+    const sql = `SELECT department_id AS id,
+                        department.name AS department,
+                        SUM(salary) AS budget
+                 FROM role
+                 JOIN department ON role.department_id = department.id GROUP BY department_id`;
+  
+    try {
+      const [rows] = await db.promise().query(sql);
+      console.table(rows);
+      promptUser();
+    } catch (err) {
+      console.log(err);
+    }
+  };
+  
 
