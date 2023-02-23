@@ -1,4 +1,4 @@
-// TODO import and require mysql12 and inquirer
+//import and require mysql12 and inquirer
 const mysql = require('mysql2');
 const inquirer = require('inquirer');
 const cTable = require('console.table');
@@ -18,7 +18,7 @@ db.connect(err => {
     console.log(`Connected to employee_db database.`)
    promptUser(); 
 });
-
+// title card
 const promptUser = () => {
     console.log("+------------------------+")
     console.log("|                        |")
@@ -102,7 +102,7 @@ const promptUser = () => {
     });
 };
 
-// TODO create function for showEmployees
+//function for showEmployees
 const showEmployees = () => {
     const sql = `SELECT employee.id,
                         employee.first_name,
@@ -125,7 +125,7 @@ const showEmployees = () => {
             promptUser();
         });
 };
-// TODO create function for addEmployee
+//function for addEmployee
 const addEmployee = () => {
     inquirer
       .prompt([
@@ -204,7 +204,7 @@ const addEmployee = () => {
   };
   
 
-// TODO create function for updateEmployee
+//function for updateEmployee
 const updateEmployeeRole = async () => {
     try {
       const [employeeRows] = await db.promise().query('SELECT * FROM employee');
@@ -246,7 +246,7 @@ const updateEmployeeRole = async () => {
       console.log(err);
     }
   };
-// TODO create function for updateManager
+//function for updateManager
 const updateEmployeeManager = async () => {
     try {
       const [employeeRows] = await db.promise().query('SELECT * FROM employee');
@@ -284,7 +284,7 @@ const updateEmployeeManager = async () => {
       console.log(err);
     }
   };
-// TODO create function for employeeDepartment
+//function for employeeDepartment
 const showEmployeesByDepartment = async () => {
     console.log('Here are the employees and their departments.');
     const sql = `
@@ -303,7 +303,7 @@ const showEmployeesByDepartment = async () => {
       console.log(err);
     }
   }; 
-// TODO create function for showRoles
+//function for showRoles
 const showRoles = async () => {
     console.log('Here are all of the current roles.');
   
@@ -319,7 +319,7 @@ const showRoles = async () => {
       console.log(err);
     }
   };
-// TODO create function for addRole
+// function for addRole
 const addRole = async () => {
     try {
       const departments = await db.promise().query('SELECT id, name FROM department');
@@ -371,7 +371,7 @@ const addRole = async () => {
       console.log(err);
     }
   };
-// TODO create function for showDepartments
+//function for showDepartments
 const showDepartments = async () => {
     console.log('Here are all of the departments.');
   
@@ -385,7 +385,7 @@ const showDepartments = async () => {
       console.log(err);
     }
   };
-// TODO create function for addDepartments
+//function for addDepartments
 const addDepartment = async () => {
     try {
       const answer = await inquirer.prompt([
@@ -415,7 +415,7 @@ const addDepartment = async () => {
       console.log(err);
     }
   };
-// TODO create function for deleteDepartment
+//function for deleteDepartment
 const deleteDepartment = async () => {
     try {
       const deptSql = `SELECT * FROM department`;
@@ -452,7 +452,7 @@ const deleteDepartment = async () => {
       console.log(err);
     }
   };
-// TODO create function for deleteRole
+//function for deleteRole
 const deleteRole = async () => {
     try {
       const rolesSql = `SELECT * FROM role`;
@@ -488,7 +488,7 @@ const deleteRole = async () => {
       console.log(err);
     }
   };
-// TODO create function for deleteEmployee
+//function for deleteEmployee
 const deleteEmployee = async () => {
     try {
       const employeesSql = `SELECT * FROM employee`;
@@ -525,7 +525,7 @@ const deleteEmployee = async () => {
       console.log(err);
     }
   };
-// TODO create function for showSalaries
+//function for showSalaries
 const showTotalSalaries = async () => {
     console.log('This is the total budget by department');
   
