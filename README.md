@@ -34,6 +34,7 @@ This is a command-line application that allows a company to manage their employe
 ![](./assets/Employee-tracker-gif.gif)
 
 ## Video
+https://user-images.githubusercontent.com/115953057/221049501-6c520dc4-7b11-4254-9e86-b93245e31903.mp4
 
 ## Usage
 This command line application allows the user to:
